@@ -13,10 +13,10 @@ typedef struct Node
     
 }node;
 
-int main(int argc, const char * argv[])
-{
-    uint_1 a = 100;
-    node n1;
-    printf("%d\n",a);
-    return 0;
-}
+//int main(int argc, const char * argv[])
+//{
+//    uint_1 a = 100;
+//    node n1;
+//    printf("%d\n",a);
+//    return 0;
+//}
