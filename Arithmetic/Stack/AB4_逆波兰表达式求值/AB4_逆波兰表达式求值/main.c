@@ -92,17 +92,34 @@ int StringToNum(char *str)
     {
         return -1;
     }
-    while(str[i] != '\0')
+    
+    if((strSize > 1) && (str[0] == '-'))
     {
-        if(str[i] >= '0' && str[i] <= '9')
+        while(str[i] != '\0')
         {
-            ret += (str[i] - '0') * (int)pow(10, strSize-i-1);
+            if(str[i] >= '0' && str[i] <= '9')
+            {
+                ret += (str[i] - '0') * (int)pow(10, strSize-i-1);
+            }
+            i++;
         }
-        else
+        ret = -ret;
+        
+    }
+    else
+    {
+        while(str[i] != '\0' )
         {
-            ret = (int)(str[i]);
+            if(str[i] >= '0' && str[i] <= '9')
+            {
+                ret += (str[i] - '0') * (int)pow(10, strSize-i-1);
+            }
+            else
+            {
+                ret = (int)(str[i]);
+            }
+            i++;
         }
-        i++;
     }
     return ret;
 }
@@ -110,7 +127,7 @@ int StringToNum(char *str)
 int main(int argc, const char * argv[])
 {
     struct HeadNode *T = StackInit();
-    char tokens[][3] = {"2","3","+","5","-"};
+    char tokens[][10] = {"3","-19","-","13","33","+","-","-1","-"};
     int x = 0;
     int y = 0;
     char symbol = '0';
@@ -128,25 +145,30 @@ int main(int argc, const char * argv[])
             x = TopOperation(T);
             PopOperation(T);
             y = TopOperation(T);
+            PopOperation(T);
             if(symbol == '+')
             {
-                result = x + y;
+                result = y + x;
             }
             else if(symbol == '-')
             {
-                result = x - y;
+                result = y - x;
             }
             else if(symbol == '*')
             {
-                result = x * y;
+                result = y * x;
             }
             else
             {
-                result = x / y;
+                if(x != 0)
+                {
+                    result = y / x;
+                    
+                }
             }
             PushOperation(T, result);
         }
-        
+        result = TopOperation(T);
         i++;
     }
     

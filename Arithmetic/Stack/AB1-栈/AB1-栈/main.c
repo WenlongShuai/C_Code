@@ -138,7 +138,8 @@ int main(int argc, const char * argv[])
 {
     int time = 0;
     int num = 0;
-    char *str;
+    //char *str;   //如果写成这种格式有些编译器会报错，显示数组越界。因为是一个指针变量，指向的内存地址不确定
+    char str[20] = {0};  //写成这种格式是最恰当的
     struct HeadNode* T = StackInit();
     scanf("%d",&time);
     

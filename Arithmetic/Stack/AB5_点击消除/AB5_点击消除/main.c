@@ -86,14 +86,15 @@ int TopOperation(struct HeadNode *T)
 
 int main(int argc, const char * argv[])
 {
-    char *str = "bbbbba";
+    char str[300000] = {0};   //输入的字符串
     int i = 1;
     int ret = 0;
     int j = 0;
     int x = 0;
+    gets(str);
     int strSize = strlen(str);
-    char surplus[10] = {0};
-    char convert[10] = {0};
+    char surplus[300000] = {0};
+    char convert[300000] = {0};
     struct HeadNode* T = StackInit();
     PushOperation(T, (int)str[0]);
     while(i < strSize)
