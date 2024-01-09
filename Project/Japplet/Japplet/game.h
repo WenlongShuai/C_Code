@@ -22,6 +22,7 @@ void player(char board[ROW][COL]);
 void computer(char board[ROW][COL]);
 char isVictory(char board[ROW][COL]);
 void chessBoardInit(char board[ROW][COL]);
+void computerJudge(char board[ROW][COL],int x,int y);
 
 
 #endif /* game_h */

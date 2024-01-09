@@ -105,7 +105,8 @@ void computer(char board[ROW][COL])
         y = rand()%3;
         if(board[x][y] == ' ')
         {
-            board[x][y] = COMPUTER_PIECES;
+//            board[x][y] = COMPUTER_PIECES;
+            computerJudge(board,x,y);
             showChessboardMenu(board);
             break;
         }
@@ -134,7 +135,6 @@ char isVictory(char board[ROW][COL])
 {
     int i = 0;
     int j = 0;
-    int ret = 0;
     for(i=0;i<ROW;i++)
     {
         if((board[i][0]==board[i][1]) && (board[i][1]==board[i][2]) && board[i][1]!=' ')
@@ -166,5 +166,149 @@ char isVictory(char board[ROW][COL])
     else
     {
         return 'C';
+    }
+}
+
+void computerJudge(char board[ROW][COL],int x,int y)
+{
+    int i = 0;
+    int j = 0;
+    //防守
+    //反斜线判断
+    if(board[0][0]==PLAYER_PIECES && board[1][1]==PLAYER_PIECES)
+    {
+        if(board[2][2] == ' ')
+        {
+            board[2][2] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    else if(board[1][1]==PLAYER_PIECES && board[2][2]==PLAYER_PIECES)
+    {
+        if(board[0][0]==' ')
+        {
+            board[0][0] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    else if(board[0][0]==PLAYER_PIECES && board[2][2]==PLAYER_PIECES)
+    {
+        if(board[1][1]==' ')
+        {
+            board[1][1] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    //斜线判断
+    else if(board[0][2]==PLAYER_PIECES && board[1][1]==PLAYER_PIECES)
+    {
+        if(board[2][0]==' ')
+        {
+            board[2][0] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    else if(board[0][2]==PLAYER_PIECES && board[2][0]==PLAYER_PIECES)
+    {
+        if(board[1][1]==' ')
+        {
+            board[1][1] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    else if(board[1][1]==PLAYER_PIECES && board[2][0]==PLAYER_PIECES)
+    {
+        if(board[0][2]==' ')
+        {
+            board[0][2] = COMPUTER_PIECES;
+            return;
+        }
+    }
+    //行判断
+    for(i=0;i<ROW;i++)
+    {
+        if(board[i][0]==PLAYER_PIECES && board[i][1]==PLAYER_PIECES)
+        {
+            if(board[i][2]==' ')
+            {
+                board[i][2] = COMPUTER_PIECES;
+                return;
+            }
+        }
+        else if(board[i][1]==PLAYER_PIECES && board[i][2]==PLAYER_PIECES)
+        {
+            if(board[i][0]==' ')
+            {
+                board[i][0] = COMPUTER_PIECES;
+                return;
+            }
+        }
+        else if(board[i][0]==PLAYER_PIECES && board[i][2]==PLAYER_PIECES)
+        {
+            if(board[i][1]==' ')
+            {
+                board[i][1] = COMPUTER_PIECES;
+                return;
+            }
+        }
+    }
+    
+    //列判断
+    for(j=0;j<COL;j++)
+    {
+        if(board[0][j]==PLAYER_PIECES && board[1][j]==PLAYER_PIECES)
+        {
+            if(board[2][j]==' ')
+            {
+                board[2][j] = COMPUTER_PIECES;
+                return;
+            }
+        }
+        else if(board[1][j]==PLAYER_PIECES && board[2][j]==PLAYER_PIECES)
+        {
+            if(board[0][j]==' ')
+            {
+                board[0][j] = COMPUTER_PIECES;
+                return;
+            }
+        }
+        else if(board[0][j]==PLAYER_PIECES && board[2][j]==PLAYER_PIECES)
+        {
+            if(board[1][j]==' ')
+            {
+                board[1][j] = COMPUTER_PIECES;
+                return;
+            }
+        }
+    }
+    
+    
+    //进攻
+    if(board[1][1]==' ')
+    {
+        board[1][1] = COMPUTER_PIECES;
+    }
+    else
+    {
+        if(board[0][0]==' ')
+        {
+            board[0][0] = COMPUTER_PIECES;
+        }
+        else if(board[0][2]==' ')
+        {
+            board[0][2] = COMPUTER_PIECES;
+        }
+        else if(board[2][0]==' ')
+        {
+            board[2][0] = COMPUTER_PIECES;
+        }
+        else if(board[2][2]==' ')
+        {
+            board[2][2] = COMPUTER_PIECES;
+        }
+        else
+        {
+            board[x][y] = COMPUTER_PIECES;
+        }
     }
 }
