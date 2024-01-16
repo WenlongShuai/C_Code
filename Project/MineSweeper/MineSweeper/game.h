@@ -11,7 +11,7 @@
 
 #define ROW 9
 #define COL 9
-#define MINENUM 1
+#define MINENUM 5
 
 void menu();
 void setMine(char mine[ROW][COL],int row,int col);
@@ -20,6 +20,7 @@ void mineClearance(char show[ROW][COL],char mine[ROW][COL],int row,int col);
 void mineMenu(char mine[ROW][COL],int row,int col);
 void showMenu(char show[ROW][COL],int row,int col);
 void signMine(char show[ROW][COL],char mine[ROW][COL],int x,int y);
+void spreadMine(char show[ROW][COL],char mine[ROW][COL],int x,int y);
 
 
 #endif /* game_h */

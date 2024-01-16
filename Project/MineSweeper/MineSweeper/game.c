@@ -112,6 +112,7 @@
 #include "game.h"
 
 extern int mineNum;
+char temp[ROW][COL];
 
 void menu()
 {
@@ -140,6 +141,13 @@ void gameInit(char show[ROW][COL],char mine[ROW][COL],int row,int col)
         for(j=0;j<col;j++)
         {
             mine[i][j] = '0';
+        }
+    }
+    for (i=0; i<row; i++)
+    {
+        for (j=0; j<col; j++)
+        {
+            temp[i][j] = '0';
         }
     }
 }
@@ -208,10 +216,6 @@ void setMine(char mine[ROW][COL],int row,int col)
 //  得到输入坐标周围雷的个数
 int getMineNum(char mine[ROW][COL],int x,int y)
 {
-    int i = 0;
-    int j = 0;
-    int count = 0;
-    
     //输入的坐标为第一行或者最后一行，这时候坐标周围就没有8个点，只有3个点或者5个点
     if((x == 0 || x==ROW-1) && (y>=0 && y<COL))
     {
@@ -272,7 +276,6 @@ void mineClearance(char show[ROW][COL],char mine[ROW][COL],int row,int col)
     int x = 0;
     int y = 0;
     int num = row*col;
-    int mineCount = 0;
     char pattern = 0;
     while(num>MINENUM)
     {
@@ -295,8 +298,11 @@ void mineClearance(char show[ROW][COL],char mine[ROW][COL],int row,int col)
                 }
                 else
                 {
-                    mineCount = getMineNum(mine, x-1, y-1);
-                    show[x-1][y-1] = mineCount+'0';
+                
+                    spreadMine(show,mine,x,y);
+//                    mineCount = getMineNum(mine, x-1, y-1);
+//                    show[x-1][y-1] = mineCount+'0';
+                    
                 }
             }
             num--;
@@ -337,73 +343,33 @@ void signMine(char show[ROW][COL],char mine[ROW][COL],int x,int y)
 //  如果坐标附近没有雷，则就展开不是雷的坐标
 void spreadMine(char show[ROW][COL],char mine[ROW][COL],int x,int y)
 {
-    // mine[x-1][y+1]+mine[x][y+1]+mine[x+1][y+1]+mine[x-1][y]+
-    // mine[x+1][y]+mine[x-1][y-1]+mine[x][y-1]+mine[x+1][y-1]
-    int num = 0;
-    num = getMineNum(mine, x, y);
-    show[x-1][y-1] = num + '0';
-    if(mine[x-1][y+1])
+    int i = 0;
+    int j = 0;
+    
+    if(temp[x-1][y-1] == '1')
     {
-        
+        return;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //输入的坐标为第一行或者最后一行，这时候坐标周围就没有8个点，只有3个点或者5个点
-    if((x == 0 || x==ROW-1) && (y>=0 && y<COL))
+    if(getMineNum(mine,x-1,y-1) > 0 )
     {
-        if(x==0 && y==0)  //坐标为(0,0)
-        {
-            //mine[x][y+1]+mine[x+1][y]+mine[x+1][y+1]
-            num = getMineNum(mine, x, y);
-            show[x-1][y-1] = num + '0';
-            
-            
-        }
-        else if(x==ROW-1 && y==0)  //坐标为(8,0)
-        {
-            //mine[x-1][y]+mine[x-1][y+1]+mine[x][y+1]
-        }
-        else if(x==0 && y==COL-1)   //坐标为(0,8)
-        {
-            // mine[x][y-1]+mine[x+1][y-1]+mine[x+1][y]
-        }
-        else if(x==ROW-1 && y==ROW-1)       //  坐标为(8,8)
-        {
-           // mine[x-1][y-1]+mine[x-1][y]+mine[x][y-1]
-        }
-        else if(x==0 && (y>=0 && y<COL))  //坐标为第一行
-        {
-            // mine[x][y-1]+mine[x][y+1]+mine[x+1][y-1]+mine[x+1][y]+mine[x+1][y+1]
-        }
-        else   //坐标为最后一行
-        {
-            // mine[x-1][y-1]+mine[x-1][y]+mine[x-1][y+1]+mine[x][y-1]+mine[x][y+1]
-        }
+        show[x-1][y-1] = getMineNum(mine,x-1,y-1) + '0';
+        return;
     }
-    //输入的坐标为第一列或者最后一列，这时候坐标周围就没有8个点，只有3个点或者5个点
-    else if((x>=0 && x<ROW) && (y == 0 || y==COL-1))
-    {
-        if(y==0 && (x>=0 && x<ROW))  //坐标为第一列
-        {
-            // mine[x-1][y]+mine[x-1][y+1]+mine[x][y+1]+mine[x+1][y+1]+mine[x+1][y]
-        }
-        else  //坐标为最后一列
-        {
-            // mine[x-1][y-1]+mine[x-1][y]+mine[x][y-1]+mine[x+1][y-1]+mine[x+1][y]
-        }
-    }
-    //  输入的坐标在第一行到最后一行，一列到最后一列之间，坐标周围就有8个点
     else
     {
-        // mine[x-1][y+1]+mine[x][y+1]+mine[x+1][y+1]+mine[x-1][y]+
-        // mine[x+1][y]+mine[x-1][y-1]+mine[x][y-1]+mine[x+1][y-1]
+        for(i=-1;i<2;i++)
+        {
+            for(j=-1;j<2;j++)
+            {
+                if(x-1+i == 0 || x-1+i == ROW-1 || y-1+j == 0 || y-1+j == COL-1)
+                {
+                    continue;
+                }
+                temp[x-1+i][y-1+j] = '1';
+                spreadMine(show,mine,x+i,y+j);
+                show[x-1+i][y-1+j] = getMineNum(mine,x-1+i,y-1+j) + '0';
+            }
+        }
     }
 }
