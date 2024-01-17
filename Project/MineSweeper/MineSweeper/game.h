@@ -11,7 +11,8 @@
 
 #define ROW 9
 #define COL 9
-#define MINENUM 5
+#define MINENUM 9
+
 
 void menu();
 void setMine(char mine[ROW][COL],int row,int col);

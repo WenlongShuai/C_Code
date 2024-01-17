@@ -1,6 +1,5 @@
 //  MineSweeper
 
-
 #include "game.h"
 
 int mineNum = 0;
@@ -28,8 +27,6 @@ int main(int argc, const char * argv[])
             case 1:
                 printf("开始扫雷\n");
                 setMine(mine, row, col);
-                mineMenu(mine, row, col);
-                printf("------------------------\n");
                 showMenu(show, row, col);
                 mineClearance(show, mine, row, col);
                 break;

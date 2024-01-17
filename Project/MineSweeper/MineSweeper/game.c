@@ -298,11 +298,15 @@ void mineClearance(char show[ROW][COL],char mine[ROW][COL],int row,int col)
                 }
                 else
                 {
-                
-                    spreadMine(show,mine,x,y);
-//                    mineCount = getMineNum(mine, x-1, y-1);
-//                    show[x-1][y-1] = mineCount+'0';
-                    
+                    if(show[x-1][y-1] == '*')
+                    {
+                        spreadMine(show,mine,x-1,y-1);
+                    }
+                    else
+                    {
+                        printf("此坐标已被扫过!\n");
+                        continue;
+                    }
                 }
             }
             num--;
@@ -316,7 +320,7 @@ void mineClearance(char show[ROW][COL],char mine[ROW][COL],int row,int col)
         
         if(mineNum == 0)   //把全部雷都标记正确
         {
-            printf("恭喜，获得胜利!\n");
+            printf("恭喜，雷已被标记完，获得胜利!\n");
             break;
         }
     }
@@ -339,36 +343,38 @@ void signMine(char show[ROW][COL],char mine[ROW][COL],int x,int y)
     }
 }
 
-
 //  如果坐标附近没有雷，则就展开不是雷的坐标
 void spreadMine(char show[ROW][COL],char mine[ROW][COL],int x,int y)
 {
     int i = 0;
     int j = 0;
     
-    if(temp[x-1][y-1] == '1')
+    if (getMineNum(mine,x,y) > 0 )   //判断该点的周围是否有雷
     {
+        show[x][y] = getMineNum(mine,x,y) + '0';
         return;
     }
-    
-    if(getMineNum(mine,x-1,y-1) > 0 )
+    else if(show[x][y] != '*' )   //判断该坐标是否被标记（是否被走过该点）
     {
-        show[x-1][y-1] = getMineNum(mine,x-1,y-1) + '0';
         return;
     }
     else
     {
+        show[x][y] = '0';  //如果这个点附近没有雷，则先把该点的内容置为‘0’
         for(i=-1;i<2;i++)
         {
             for(j=-1;j<2;j++)
             {
-                if(x-1+i == 0 || x-1+i == ROW-1 || y-1+j == 0 || y-1+j == COL-1)
+                //判断坐标是否超过数组的大小，越界访问
+                if((x+i<0 || x+i>ROW-1) || (y+j<0 || y+j>COL-1))
                 {
                     continue;
                 }
-                temp[x-1+i][y-1+j] = '1';
-                spreadMine(show,mine,x+i,y+j);
-                show[x-1+i][y-1+j] = getMineNum(mine,x-1+i,y-1+j) + '0';
+                else if(mine[x][y] == '1')  //判断布雷数组里面是不是雷，如果是雷，这个点则不继续往下展开
+                {
+                    continue;
+                }
+                spreadMine(show,mine,x+i,y+j);  //递归
             }
         }
     }
