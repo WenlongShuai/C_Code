@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include <math.h>
 
-int getGCD(int num1,int num2)   //得到最大公因数
+unsigned int getGCD(int num1,int num2)   //得到最大公因数
 {
-    int c = 0;
+    unsigned int c = 0;
     while(num1%num2)
     {
         c = num1 % num2;
@@ -20,38 +20,88 @@ int getGCD(int num1,int num2)   //得到最大公因数
     return num2;
 }
 
-int getLCM(int num1,int num2)   //得到最小公倍数
-{
-    int count = 1;
-    int i = 2;
+//    方法一
+//long getLCM(long num1,long num2)   //得到最小公倍数
+//{
+//    long count = 1;
+//    long i = 2;
+//    while(1)
+//    {
+//        if((num1%i!=0) || (num2%i!=0))
+//        {
+//            i++;
+//        }
+//        if((num1%i==0) && (num2%i==0))
+//        {
+//            count *= i;
+//            num1 /= i;
+//            num2 /= i;
+//        }
+//        if(getGCD(num1,num2) == 1)
+//        {
+//            break;
+//        }
+//    }
+//    return num1 * num2 * count;
+//}
 
+
+//  方法二
+//long getLCM(long num1,long num2)
+//{
+//    long lcm = (num1>num2)?num1:num2;
+//    while(1)
+//    {
+//        if((lcm%num1==0) && (lcm%num2==0))
+//        {
+//            break;
+//        }
+//        lcm++;
+//    }
+//    return lcm;
+//}
+
+
+//方法三
+long getLCM(long num1,long num2)
+{
+    int i = 1;
     while(1)
     {
-        if((num1%i!=0) || (num2%i!=0))
-        {
-            i++;
-        }
-        if((num1%i==0) && (num2%i==0))
-        {
-            count *= i;
-            num1 /= i;
-            num2 /= i;
-        }
-        if(getGCD(num1,num2) == 1)
+        if((num1*i)%num2 == 0)
         {
             break;
         }
+        i++;
     }
-    return num1 * num2 * count;
+    return num1*i;
 }
 
 int main(int argc, const char * argv[])
 {
-    int num1 = 0;
-    int num2 = 0;
-    int ret = 0;
+    //方法二
+//    unsigned int num1 = 0;
+//    unsigned int num2 = 0;
+//    long result = 0;
+//    scanf("%d%d",&num1,&num2);
+//    result = getLCM(num1,num2);
+//    printf("%ld\n",result);
+
+    //方法一
+//    unsigned int num1 = 0;
+//    unsigned int num2 = 0;
+//    long result = 0;
+//    scanf("%d%d",&num1,&num2);
+//    result = getLCM(num1,num2);
+//    printf("%ld\n",result);
+    
+    //方法三
+    unsigned int num1 = 0;
+    unsigned int num2 = 0;
+    long result = 0;
     scanf("%d%d",&num1,&num2);
-    ret = getLCM(num1,num2);
-    printf("%d\n",ret);
+    result = getLCM(num1,num2);
+    printf("%ld\n",result);
+
     return 0;
 }
