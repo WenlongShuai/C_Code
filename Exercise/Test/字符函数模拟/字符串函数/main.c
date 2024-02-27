@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 //1、求字符串长度
 //库函数：size_t strlen(const char *str)
@@ -64,6 +65,46 @@ char *my_strcat(char *destnation,const char *source)
     return ret;
 }
 
+
+//4、比较两个字符串的大小
+//库函数：int strcmp ( const char * str1, const char * str2 )
+//模拟
+int my_strcmp(const char *str1,const char *str2)
+{
+    assert(str1 && str2);
+    while(*str1 == *str2)
+    {
+        if(*str1 == '\0')
+            return 0;
+        str1++;
+        str2++;
+    }
+//    if(*str1 > *str2)
+//        return 1;
+//    else
+//        return -1;
+    return *str1-*str2;
+}
+//前面的几个库函数的长度不受限制
+
+
+//5、将一个字符串按指定的长度复制给另一个字符串
+//库函数：char * strncpy ( char * destination, const char * source, size_t num );
+//注意事项
+//1、目标字符串足够大
+//2、如果需要复制的字符的个数大于源字符串的话，剩余的字符则用'\0'代替。复制给目标字符串中
+//模拟
+char *my_strncpy(char *destnation, const char *source, int num)
+{
+    char *dest = destnation;
+    while(num--)
+    {
+        *destnation++ = *source++;
+    }
+    return dest;
+}
+
+
 int main(int argc, const char * argv[])
 {
     //1、my_strlen()
@@ -78,10 +119,30 @@ int main(int argc, const char * argv[])
 //    printf("%s\n",ret);
     
     //3、my_strcat()
-    char dest[20] = "hello ";
-    char *source = "world";
-    char *ret = my_strcat(dest, source);
-    printf("%s\n",ret);
+//    char dest[20] = "hello ";
+//    char *source = "world";
+//    char *ret = my_strcat(dest, source);
+//    printf("%s\n",ret);
+    
+    //4、my_strcmp()
+//    char str1[] = "abcdef";
+//    char str2[] = "abcdegb";
+//    int ret = my_strcmp(str1, str2);
+//    if(ret == 0)
+//        printf("==\n");
+//    else if(ret < 0)
+//        printf("<\n");
+//    else
+//        printf(">\n");
+    
+    //5、my_strncpy()
+//    char str1[] = "hello 12345";
+//    char str2[] = "world";
+//    char *ret = my_strncpy(str1, str2, 7);
+//    printf("%s\n",ret);
+    
+        
+    
+    
     return 0;
 }
-
