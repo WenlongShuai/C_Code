@@ -92,7 +92,7 @@ int my_strcmp(const char *str1,const char *str2)
 //库函数：char * strncpy ( char * destination, const char * source, size_t num );
 //注意事项
 //1、目标字符串足够大
-//2、如果需要复制的字符的个数大于源字符串的话，剩余的字符则用'\0'代替。复制给目标字符串中
+//2、如果需要复制的字符num的个数大于源字符串的话，剩余的字符则用'\0'代替。复制给目标字符串中
 //模拟
 char *my_strncpy(char *destnation, const char *source, int num)
 {
@@ -104,6 +104,40 @@ char *my_strncpy(char *destnation, const char *source, int num)
     return dest;
 }
 
+//6、将一个字符串按指定的长度追加到另一个字符串后面
+//库函数：char * strncat ( char * destination, const char * source, size_t num );
+//注意事项
+//1、目标字符串空间足够大
+//2、如果需要追加的字符num的个数大于源字符串的话，剩余的字符则不管。就把该有的字符追加到目标字符串'\0'后面就行了
+//模拟
+char *my_strncat(char *destnation, const char *source, int num)
+{
+    char *dest = destnation;
+    while(*destnation++);
+    destnation--;
+    while(num--)
+    {
+        *destnation++ = *source++;
+    }
+    
+    return dest;
+}
+
+//7、比较两个字符串中指定长度的大小
+//库函数：int strncmp ( const char * str1, const char * str2, size_t num );
+//模拟
+int my_strncmp(const char *str1,const char *str2,int num)
+{
+    while(num--)
+    {
+        if(((*str1==*str2) && (*str1 == '\0')) || *str1!=*str2)
+            break;
+
+        str1++;
+        str2++;
+    }
+    return *str1-*str2;
+}
 
 int main(int argc, const char * argv[])
 {
@@ -140,6 +174,18 @@ int main(int argc, const char * argv[])
 //    char str2[] = "world";
 //    char *ret = my_strncpy(str1, str2, 7);
 //    printf("%s\n",ret);
+    
+    //6、my_strncat()
+//    char str1[20] = "abcde\0xxxxxxxx";
+//    char str2[] = "hello";
+//    char *ret = my_strncat(str1, str2, 8);
+//    printf("%s\n",ret);
+    
+    //7、my_strncmp()
+    char str1[] = "abcde";
+    char str2[] = "abcdf";
+    int ret = my_strncmp(str1, str2, 8);
+    printf("%d\n",ret);
     
         
     
