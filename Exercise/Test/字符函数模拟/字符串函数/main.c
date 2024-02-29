@@ -250,10 +250,44 @@ void *my_memcpy(void *destnation, const void *source, int num)
         *de = *so;
         de++;
         so++;
-        
     }
     return destnation;
 }
+
+
+//11、内存拷贝函数，适用于两块重叠的内存拷贝
+//库函数：void * memmove ( void * destination, const void * source, size_t num );
+//特殊情况（重叠地址拷贝）
+// 1、当destination < source：就让source区域从前往后拷贝（重叠地址拷贝）
+// 2、当destination > source：就让source区域从后往前拷贝（重叠地址拷贝）
+// 3、当拷贝地址不重叠的时候，让source区域从后往前拷贝或者从前往后都一样
+//模拟
+void *my_memmove(void *destnation, const void *source, int num)
+{
+    assert(source);
+    char *de = (char *)destnation;
+    char *so = (char *)source;
+    
+    if(de < so)   //从前往后拷贝
+    {
+        while(num--)
+        {
+            *de = *so;
+            de++;
+            so++;
+        }
+    }
+    else     //从后往前拷贝
+    {
+        while(num--)
+        {
+            *(de+num) = *(so+num);
+        }
+    }
+    
+    return destnation;
+}
+
 
 int main(int argc, const char * argv[])
 {
@@ -321,21 +355,47 @@ int main(int argc, const char * argv[])
 //    }
     
     //10、my_memcpy()
+    //整型拷贝
 //    int str1[5] = {1,2,3,4,5};
 //    int str2[3] = {0};
-//    my_memcpy(str2, str1, 12);
+//    my_memcpy(str1, str1, 8);
 //    int i = 0;
 //    for(i=0;i<3;i++)
 //    {
 //        printf("%d ",str2[i]);
 //    }
+    //字符串拷贝
+//    char str1[] = "hello world";
+//    char str2[20] = {0};
+//    char *ret = my_memcpy(str2, str1, 7);
+//    printf("%s\n",ret);
+    //浮点型拷贝
+//    float str1[5] = {1.1,2.1,3.1,4.1,5.1};
+//    float str2[3] = {0};
+//    my_memcpy(str2, str1, 12);
+//    int i = 0;
+//    for(i=0;i<3;i++)
+//    {
+//        printf("%lf ",str2[i]);
+//    }
     
-    char str1[] = "hello world";
-    char str2[20] = {0};
-    char *ret = my_memcpy(str2, str1, 7);
-    printf("%s\n",ret);
-    
-    
+    //11、my_memmove()
+    //整型拷贝   destination < source
+//    int str1[7] = {1,2,3,4,5,6,7};
+//    my_memmove(str1, str1+2, 12);
+//    int i = 0;
+//    for(i=0;i<7;i++)
+//    {
+//        printf("%d ",str1[i]);
+//    }
+    //整型拷贝   destination > source
+//    int str1[7] = {1,2,3,4,5,6,7};
+//    my_memmove(str1+1, str1, 12);
+//    int i = 0;
+//    for(i=0;i<7;i++)
+//    {
+//        printf("%d ",str1[i]);
+//    }
     
     
     return 0;
