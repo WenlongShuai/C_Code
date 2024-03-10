@@ -63,8 +63,9 @@ void PopOperation(struct HeadNode *T)
     }
     struct StackNode *p = T->head->next;
     T->head->next = p->next;
+    
+    free(p);//因为free掉了这块内存之后，p指针指向的地址还是原来那块内存。这样p就会成为野指针。所以释放完了，要将p指向的地址置为NULL。
     p = NULL;
-    free(p);
 }
 
 int TopOperation(struct HeadNode *T)

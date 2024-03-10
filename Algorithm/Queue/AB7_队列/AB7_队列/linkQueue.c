@@ -73,8 +73,9 @@ void popQueue(struct Queue *queue)
         node = queue->front->next;
         queue->front->next = node->next;
         printf("%d\n",node->data);
-        free(node);
-    }
+        free(node);   //因为free掉了这块内存之后，node指针指向的地址还是原来那块内存。这样node就会成为野指针。所以释放完了，要将node指向的地址置为NULL。
+        node = NULL;
+    }   
 }
 
 //输出队首，不出队

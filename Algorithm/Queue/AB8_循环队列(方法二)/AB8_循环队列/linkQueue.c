@@ -107,8 +107,11 @@ void freeQueue(struct Queue *queue)
     {
         struct Node *temp = queue->front->next;
         free(queue->front);
+        queue->front = NULL;
         queue->front = temp;
     }
     free(endNode);
     free(queue);
+    endNode = NULL;
+    queue = NULL;
 }
