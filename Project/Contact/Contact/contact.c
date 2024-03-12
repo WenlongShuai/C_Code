@@ -35,21 +35,20 @@ struct Contact* contactInit()
 }
 
 
-void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,char *address)
+void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,char *address,int offset)
 {
-    static int i = 0;
-    contact += i;
+    contact += offset;
     assert(contact && name);
     strcpy(contact->name, name);
     contact->age = age;
     contact->sex = sex;
     strcpy(contact->phone, phone);
     strcpy(contact->address, address);
-    i++;
 }
 
 void contactDel(struct Contact *contact, char *delName)
 {
+    int i = 0;
     struct Contact *del = contactSeek(contact,delName);
     if(del == NULL)
     {
@@ -57,11 +56,28 @@ void contactDel(struct Contact *contact, char *delName)
     }
     else
     {
+        contact = del;
         memset(del->name, 0, sizeof(del->name));
         del->age = 0;
         del->sex = male;
         memset(del->phone, 0, sizeof(del->phone));
         memset(del->address, 0, sizeof(del->address));
+        
+        while(strcmp((contact+i+1)->name, ""))
+        {
+            strcpy((contact+i)->name, (contact+i+1)->name);
+            (contact+i)->age = (contact+i+1)->age;
+            (contact+i)->sex = (contact+i+1)->sex;
+            strcpy((contact+i)->phone, (contact+i+1)->phone);
+            strcpy((contact+i)->address, (contact+i+1)->address);
+            i++;
+        }
+        memset((contact+i)->name, 0, sizeof((contact+i)->name));
+        (contact+i)->age = 0;
+        (contact+i)->sex = male;
+        memset((contact+i)->phone, 0, sizeof((contact+i)->phone));
+        memset((contact+i)->address, 0, sizeof((contact+i)->address));
+        
         printf("delete success!\n");
     }
 }

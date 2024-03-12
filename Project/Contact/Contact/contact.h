@@ -29,7 +29,7 @@ struct Contact
 void contactMenu();
 struct Contact* contactInit();
 void contactShow(struct Contact *contact);
-void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,char *address);
+void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,char *address,int offset);
 void contactDel(struct Contact *contact, char *delName);
 void contactAmend(struct Contact *contact, char *amendName);
 struct Contact *contactSeek(struct Contact *contact, char *findName);

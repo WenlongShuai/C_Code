@@ -16,6 +16,7 @@ int main(int argc, const char * argv[])
 {
     struct Contact *contact = NULL;
     contact = contactInit();
+    int offset = 0;
     char name[20] = {0};
     int age = 0;
     enum Sex sex;
@@ -26,18 +27,23 @@ int main(int argc, const char * argv[])
     {
         contactMenu();
         scanf("%d",&option);
+        getchar();
         switch(option)
         {
+            case 0:
+                break;
             case 1:     //add
                 printf("请输入联系人信息：\n");
                 printf("输入格式：姓名,年龄,性别,电话,地址\n");
                 scanf("%s%d%d%s%s",name,&age,&sex,phone,address);
-                contactAdd(contact, name, age, sex, phone, address);
+                contactAdd(contact, name, age, sex, phone, address, offset);
+                offset++;
                 break;
             case 2:     //del
                 printf("请输入要删除的联系人名字\n");
                 scanf("%s",name);
                 contactDel(contact, name);
+                offset--;
                 break;
             case 3:     //amend
                 printf("请输入要修改的联系人名字\n");
@@ -61,8 +67,8 @@ int main(int argc, const char * argv[])
                 contactSort(contact);
                 break;
             default:
+                printf("输入选项有误，请重新输入！\n");
                 break;
-                
         }
         
     }while(option);
