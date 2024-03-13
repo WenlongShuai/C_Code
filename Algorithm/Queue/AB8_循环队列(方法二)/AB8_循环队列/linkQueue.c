@@ -8,10 +8,20 @@ struct Queue *initQueue(int queueSize)
     int numNode = queueSize+1;
     struct Node *top = NULL;
     struct Queue *queue = (struct Queue *)malloc(sizeof(struct Queue));
+    if(queue==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return NULL;
+    }
     queue->size = 0;
     while(numNode)
     {
         struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+        if(node==NULL)
+        {
+            printf("%s\n",strerror(errno));
+            return NULL;
+        }
         if(numNode == queueSize+1)
         {
             node->next = NULL;
@@ -101,6 +111,11 @@ void printQueue(struct Queue *queue)
 void freeQueue(struct Queue *queue)
 {
     struct Node *endNode = (struct Node *)malloc(sizeof(struct Node));
+    if(endNode==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return NULL;
+    }
     endNode = queue->front;
     queue->front = queue->front->next;
     while(queue->front != endNode)

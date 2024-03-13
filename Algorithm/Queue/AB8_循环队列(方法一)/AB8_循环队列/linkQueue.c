@@ -5,6 +5,11 @@ struct Queue *initQueue()
 {
     struct Node *node = (struct Node *)malloc(sizeof(struct Node));
     struct Queue *queue = (struct Queue *)malloc(sizeof(struct Queue));
+    if(node==NULL || queue==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return NULL;
+    }
     node->next = NULL;
     queue->front = node;
     queue->rear = queue->front;
@@ -37,6 +42,11 @@ void pushQueue(struct Queue *queue,int data)
         return;
     }
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    if(newNode==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return ;
+    }
     if(isEmpty(queue))
     {
         newNode->data = data;
@@ -61,6 +71,11 @@ void popQueue(struct Queue *queue)
         return;
     }
     struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+    if(node==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return ;
+    }
     node = queue->front->next;
     queue->front->next = node->next;
 //    if(node->next == queue->front)
@@ -80,6 +95,11 @@ void frontQueue(struct Queue *queue)
         return;
     }
     struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+    if(node==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return ;
+    }
     node = queue->front->next;
     printf("%d\n",node->data);
 }

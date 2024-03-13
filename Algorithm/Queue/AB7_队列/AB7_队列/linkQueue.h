@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 struct Queue *initQueue();
 void pushQueue(struct Queue *queue,int data);

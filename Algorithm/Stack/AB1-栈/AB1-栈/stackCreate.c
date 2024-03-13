@@ -21,6 +21,11 @@ struct HeadNode* StackInit()
 {
     struct StackNode* node = (struct StackNode *)malloc(sizeof(struct StackNode));
     struct HeadNode* T = (struct HeadNode *)malloc(sizeof(struct HeadNode));
+    if(node==NULL || T==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return NULL;
+    }
     T->head = node;
     node->next = NULL;
     return T;
@@ -41,6 +46,11 @@ int Empty(struct HeadNode *T)
 void PrintStack(struct HeadNode *T)
 {
     struct StackNode* temp = (struct StackNode *)malloc(sizeof(struct StackNode));
+    if(temp==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return ;
+    }
     temp = T->head->next;
     while(temp != NULL)
     {
@@ -53,6 +63,11 @@ void PushOperation(struct HeadNode *T,int d)
 {
     //printf("push\n");
     struct StackNode *p = (struct StackNode *)malloc(sizeof(struct StackNode));
+    if(p==NULL)
+    {
+        printf("%s\n",strerror(errno));
+        return;
+    }
     p->next = T->head->next;
     T->head->next = p;
     p->data = d;

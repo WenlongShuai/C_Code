@@ -5,6 +5,7 @@
 #define stackCreate_h
 
 #include <stdio.h>
+#include <errno.h>
 
 struct HeadNode* StackInit();
 int Empty(struct HeadNode *T);
