@@ -63,18 +63,25 @@ unsigned int getGCD(int num1,int num2)   //得到最大公因数
 
 
 //方法三
+// long getLCM(long num1,long num2)
+// {
+//     int i = 1;
+//     while(1)
+//     {
+//         if((num1*i)%num2 == 0)
+//         {
+//             break;
+//         }
+//         i++;
+//     }
+//     return num1*i;
+// }
+
+// 方法四
+//最小公倍数 = 两数乘积/最大公约数
 long getLCM(long num1,long num2)
 {
-    int i = 1;
-    while(1)
-    {
-        if((num1*i)%num2 == 0)
-        {
-            break;
-        }
-        i++;
-    }
-    return num1*i;
+    return num1*num2/getGCD(num1,num2); 
 }
 
 int main(int argc, const char * argv[])

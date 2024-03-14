@@ -13,32 +13,109 @@ void contactMenu()
     printf("------------------------------------\n");
 }
 
+void printMenu(int num,char *name, int *age, int *sex, char *phone, char *address)
+{
+    switch(num)
+    {
+        case add:
+            printf("请输入联系人信息：\n");
+            printf("输入格式：姓名,年龄,性别,电话,地址\n");
+            scanf("%s%d%d%s%s",name,age,sex,phone,address);
+            break;
+        case del:
+            printf("请输入要删除的联系人名字\n");
+            scanf("%s",name);
+            break;
+        case amend:
+            printf("请输入要修改的联系人名字\n");
+            scanf("%s",name);
+            break;
+        case seek:
+            printf("请输入要查找的联系人名字\n");
+            scanf("%s",name);
+            break;
+        default:
+            break;
+    }
+}
+
+//1、静态申请空间，一次性就申请了固定的内存空间
+//struct Contact* contactInit()
+//{
+//    //方式一：通过malloc向堆区申请一个100个结构体大小的内存
+//    //malloc不会初始化这块内存空间，需要自己手动初始化
+//    struct Contact *contact = (struct Contact *)malloc(sizeof(struct Contact) * CONTACTNUM);
+////    assert(contact);
+//    if(contact == NULL)
+//    {
+//        printf("%s\n",strerror(errno));
+//        return NULL;
+//    }
+//    //因为malloc向堆区申请一块连续的空间，如果申请成功则返回指向这块空间的指针，否则返回NULL。所以需要在这判断一下，防止申请失败
+//    int i = 0;
+//    struct Contact *tmp = contact;
+//    for(i=0;i<CONTACTNUM;i++,tmp++)
+//    {
+//        memset(tmp->name, 0, sizeof(tmp->name));
+//        tmp->age = 0;
+//        tmp->sex = male;
+//        memset(tmp->phone, 0, sizeof(tmp->phone));
+//        memset(tmp->address, 0, sizeof(tmp->address));
+//    }
+//
+//    //方式二，直接定义一个结构体数组,全部初始化0
+////    struct Contact contact[100] = {0};
+//
+//
+//    //方式三。直接使用calloc申请内存空间
+//    //calloc  向内存申请空间并且把这段内存初始化为0
+//    struct Contact *contact = calloc(CONTACTNUM,sizeof(struct Contact));
+//
+//    return contact;
+//}
+
+//2、动态申请内存空间，当内存空间不够时再向堆区申请空间
 struct Contact* contactInit()
 {
-    //方式一：通过malloc向堆区申请一个100个结构体大小的内存
-    struct Contact *contact = (struct Contact *)malloc(sizeof(struct Contact) * CONTACTNUM);
     int i = 0;
-    struct Contact *tmp = contact;
-    for(i=0;i<CONTACTNUM;i++,tmp++)
+    struct Contact *contact = (struct Contact*)malloc(CONTACTMIN * sizeof(struct Contact));
+    if(contact == NULL)
     {
-        memset(tmp->name, 0, sizeof(tmp->name));
-        tmp->age = 0;
-        tmp->sex = male;
-        memset(tmp->phone, 0, sizeof(tmp->phone));
-        memset(tmp->address, 0, sizeof(tmp->address));
+        printf("%s\n",strerror(errno));
+        return NULL;
     }
-    
-    //方式二，直接定义一个结构体数组,全部初始化0
-//    struct Contact contact[100] = {0};
+    for(i=0;i<CONTACTNUM;i++)
+    {
+        memset((contact+i)->name, 0, sizeof((contact+i)->name));
+        (contact+i)->age = 0;
+        (contact+i)->sex = male;
+        memset((contact+i)->phone, 0, sizeof((contact+i)->phone));
+        memset((contact+i)->address, 0, sizeof((contact+i)->address));
+    }
     
     return contact;
 }
 
 
-void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,char *address,int offset)
+void destroyContact(struct Contact *contact)
 {
+    assert(contact);
+    free(contact);
+    contact = NULL;
+}
+
+//静态内存申请的时候调用这个增加函数
+void contactAdd(struct Contact *contact, int offset, int option)
+{
+    char name[20] = {0};
+    int age = 0;
+    enum Sex sex;
+    char phone[11] = {0};
+    char address[20] = {0};
+    
+    printMenu(option,name,&age,&sex,phone,address);
+    
     contact += offset;
-    assert(contact && name);
     strcpy(contact->name, name);
     contact->age = age;
     contact->sex = sex;
@@ -46,10 +123,45 @@ void contactAdd(struct Contact *contact,char *name,int age,int sex,char *phone,c
     strcpy(contact->address, address);
 }
 
-void contactDel(struct Contact *contact, char *delName)
+//动态内存申请的时候调用这个函数
+//void contactAdd(struct Contact *contact,struct Count *count,int option)
+//{
+//    char name[20] = {0};
+//    int age = 0;
+//    enum Sex sex;
+//    char phone[11] = {0};
+//    char address[20] = {0};
+//    
+//    if(count->contactCount == count->memoryCount)
+//    {
+//        printf("add memory\n");
+//        struct Contact *addr = (struct Contact*)realloc(contact,ADDMEMORY*sizeof(struct Contact));
+//        if(addr == NULL)
+//        {
+//            printf("%s\n",strerror(errno));
+//            return;
+//        }
+//        count->memoryCount += 2;
+//        contact = addr;
+//    }
+//    
+//    printMenu(option,name,&age,&sex,phone,address);
+//    
+//    contact += count->contactCount;
+//    strcpy(contact->name, name);
+//    contact->age = age;
+//    contact->sex = sex;
+//    strcpy(contact->phone, phone);
+//    strcpy(contact->address, address);
+//    count->contactCount++;
+//}
+
+void contactDel(struct Contact *contact, int option)
 {
+    char delName[20] = {0};
     int i = 0;
-    struct Contact *del = contactSeek(contact,delName);
+    printMenu(option, delName, NULL, NULL, NULL, NULL);
+    struct Contact *del = contactSeek(contact,delName,0);
     if(del == NULL)
     {
         printf("contact does not exist\n");
@@ -82,15 +194,20 @@ void contactDel(struct Contact *contact, char *delName)
     }
 }
 
-void contactAmend(struct Contact *contact, char *amendName)
+void contactAmend(struct Contact *contact, int option)
 {
-    struct Contact *amend = contactSeek(contact,amendName);
-    int option = 0;
+    char amendName[20] = {0};
+    
+    int amendOption = 0;
     char name[20] = {0};
     int age = 0;
     enum Sex sex = male;
     char phone[11] = {0};
     char address[20] = {0};
+    
+    printMenu(option, amendName, NULL, NULL, NULL, NULL);
+    struct Contact *amend = contactSeek(contact,amendName, 0);
+    
     if(amend == NULL)
     {
         printf("contact does not exist!\n");
@@ -101,8 +218,8 @@ void contactAmend(struct Contact *contact, char *amendName)
         printf("------1、all    2、name-------\n");
         printf("------3、age    4、sex--------\n");
         printf("------5、phone  6、address----\n");
-        scanf("%d",&option);
-        switch(option)
+        scanf("%d",&amendOption);
+        switch(amendOption)
         {
             case 1:
                 printf("请输入联系人所有信息：\n");
@@ -146,8 +263,15 @@ void contactAmend(struct Contact *contact, char *amendName)
     }
 }
 
-struct Contact *contactSeek(struct Contact *contact, char *seekName)
+struct Contact *contactSeek(struct Contact *contact, char *findName, int option)
 {
+    char seekName[20] = {0};
+    if(option == seek)
+        printMenu(option, seekName, NULL, NULL, NULL, NULL);
+    
+    if(findName != NULL)
+        strcpy(seekName, findName);
+        
     //查找对应的联系人，如果找到了就返回联系人结构体地址，否则返回NULL
     while(strcmp(contact->name, ""))
     {

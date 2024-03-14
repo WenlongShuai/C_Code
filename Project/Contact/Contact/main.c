@@ -15,13 +15,11 @@
 int main(int argc, const char * argv[])
 {
     struct Contact *contact = NULL;
+    struct Count *count = (struct Count*)calloc(1,sizeof(struct Count));
+    count->memoryCount = CONTACTMIN;
     contact = contactInit();
-    int offset = 0;
-    char name[20] = {0};
-    int age = 0;
-    enum Sex sex;
-    char phone[11] = {0};
-    char address[20] = {0};
+    int offset = 0;   ////静态内存申请时调用
+    
     int option = 0;
     do
     {
@@ -31,39 +29,36 @@ int main(int argc, const char * argv[])
         switch(option)
         {
             case 0:
+                destroyContact(contact);
                 break;
-            case 1:     //add
-                printf("请输入联系人信息：\n");
-                printf("输入格式：姓名,年龄,性别,电话,地址\n");
-                scanf("%s%d%d%s%s",name,&age,&sex,phone,address);
-                contactAdd(contact, name, age, sex, phone, address, offset);
-                offset++;
+            case add:     //add
+                contactAdd(contact, offset, option);  //静态内存申请时调用
+                offset++;   //静态内存申请时调用
+//                contactAdd(contact,count,option);   //动态内存申请的时候调用
                 break;
-            case 2:     //del
-                printf("请输入要删除的联系人名字\n");
-                scanf("%s",name);
-                contactDel(contact, name);
-                offset--;
+            case del:     //del
+
+                contactDel(contact, option);
+//                count->contactCount--;   //动态内存申请的时候调用
+                offset--;  //静态内存申请时调用
                 break;
-            case 3:     //amend
-                printf("请输入要修改的联系人名字\n");
-                scanf("%s",name);
-                contactAmend(contact, name);
+            case amend:     //amend
+                contactAmend(contact, option);
                 break;
-            case 4:     //seek
-                printf("请输入要查找的联系人名字\n");
-                scanf("%s",name);
-                struct Contact *seekContact = contactSeek(contact, name);
+            case seek:     //seek
+            {
+                struct Contact *seekContact = contactSeek(contact,NULL,option);
                 if(seekContact == NULL)
                     printf("contact does not exist\n");
                 else
                     printf("姓名:%s,年龄:%d,性别:%d,电话:%s,地址:%s\n",
                            seekContact->name,seekContact->age,seekContact->sex,seekContact->phone,seekContact->address);
+            }
                 break;
-            case 5:     //show
+            case show:     //show
                 contactShow(contact);
                 break;
-            case 6:     //sort
+            case sort:     //sort
                 contactSort(contact);
                 break;
             default:
