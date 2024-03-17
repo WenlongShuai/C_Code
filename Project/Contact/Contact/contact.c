@@ -39,6 +39,67 @@ void printMenu(int num,char *name, int *age, int *sex, char *phone, char *addres
     }
 }
 
+static void addMemory(struct Contact *contact, struct Count *count)
+{
+    if(count->contactCount == count->memoryCount)
+    {
+        printf("add memory\n");
+        struct Contact *addr = (struct Contact*)realloc(contact,ADDMEMORY*sizeof(struct Contact));
+        if(addr == NULL)
+        {
+            printf("%s\n",strerror(errno));
+            return;
+        }
+        count->memoryCount += 2;
+        contact = addr;
+    }
+}
+
+
+//将联系人添加到文本数据中去，防止每次程序结束时内存中的所有联系人都没有了
+void saveContact(struct Contact *contact, struct Count *count)
+{
+    int i = 0;
+    FILE *pfWrite = fopen("contact","wb");
+    if(pfWrite == NULL)
+    {
+        perror("saveContact");
+        return;
+    }
+    printf("12345\n");
+    for(i=0;i<count->contactCount;i++)
+    {
+        fwrite(contact+i, sizeof(struct Contact), 1, pfWrite);
+    }
+    
+    fclose(pfWrite);
+    pfWrite = NULL;
+}
+
+
+
+//从文本数据中读取联系人添加到内存中
+void loadContact(struct Contact *contact, struct Count *count)
+{
+    addMemory(contact, count);
+    int i = 0;
+    FILE *pfRead = fopen("contact.txt", "rb");
+    if(pfRead == NULL)
+    {
+        perror("loadContact");
+        return;
+    }
+    while(fread(contact+i, sizeof(struct Contact), 1, pfRead) == 1)
+    {
+        i++;
+    }
+    
+    fclose(pfRead);
+    pfRead = NULL;
+    
+}
+
+
 //1、静态申请空间，一次性就申请了固定的内存空间
 //struct Contact* contactInit()
 //{
@@ -105,7 +166,26 @@ void destroyContact(struct Contact *contact)
 }
 
 //静态内存申请的时候调用这个增加函数
-void contactAdd(struct Contact *contact, int offset, int option)
+//void contactAdd(struct Contact *contact, int offset, int option)
+//{
+//    char name[20] = {0};
+//    int age = 0;
+//    enum Sex sex;
+//    char phone[11] = {0};
+//    char address[20] = {0};
+//
+//    printMenu(option,name,&age,&sex,phone,address);
+//
+//    contact += offset;
+//    strcpy(contact->name, name);
+//    contact->age = age;
+//    contact->sex = sex;
+//    strcpy(contact->phone, phone);
+//    strcpy(contact->address, address);
+//}
+
+//动态内存申请的时候调用这个函数
+void contactAdd(struct Contact *contact,struct Count *count,int option)
 {
     char name[20] = {0};
     int age = 0;
@@ -113,48 +193,19 @@ void contactAdd(struct Contact *contact, int offset, int option)
     char phone[11] = {0};
     char address[20] = {0};
     
+    addMemory(contact, count);
+    
     printMenu(option,name,&age,&sex,phone,address);
     
-    contact += offset;
+    contact += count->contactCount;
     strcpy(contact->name, name);
     contact->age = age;
     contact->sex = sex;
     strcpy(contact->phone, phone);
     strcpy(contact->address, address);
+    count->contactCount++;
 }
 
-//动态内存申请的时候调用这个函数
-//void contactAdd(struct Contact *contact,struct Count *count,int option)
-//{
-//    char name[20] = {0};
-//    int age = 0;
-//    enum Sex sex;
-//    char phone[11] = {0};
-//    char address[20] = {0};
-//    
-//    if(count->contactCount == count->memoryCount)
-//    {
-//        printf("add memory\n");
-//        struct Contact *addr = (struct Contact*)realloc(contact,ADDMEMORY*sizeof(struct Contact));
-//        if(addr == NULL)
-//        {
-//            printf("%s\n",strerror(errno));
-//            return;
-//        }
-//        count->memoryCount += 2;
-//        contact = addr;
-//    }
-//    
-//    printMenu(option,name,&age,&sex,phone,address);
-//    
-//    contact += count->contactCount;
-//    strcpy(contact->name, name);
-//    contact->age = age;
-//    contact->sex = sex;
-//    strcpy(contact->phone, phone);
-//    strcpy(contact->address, address);
-//    count->contactCount++;
-//}
 
 void contactDel(struct Contact *contact, int option)
 {

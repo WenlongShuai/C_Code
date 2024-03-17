@@ -51,12 +51,15 @@ struct Count
 
 void contactMenu();
 struct Contact* contactInit();
+void saveContact(struct Contact *contact, struct Count *count);
+void loadContact(struct Contact *contact, struct Count *count);
+
 void printMenu(int num,char *name, int *age, int *sex, char *phone, char *address);
 void destroyContact(struct Contact *contact);
 void contactShow(struct Contact *contact);
 
-void contactAdd(struct Contact *contact, int offset, int option); //静态内存申请
-//void contactAdd(struct Contact *contact,struct Count *count,int option);  //动态内存申请
+//void contactAdd(struct Contact *contact, int offset, int option); //静态内存申请
+void contactAdd(struct Contact *contact,struct Count *count,int option);  //动态内存申请
 void contactDel(struct Contact *contact, int option);
 void contactAmend(struct Contact *contact, int option);
 struct Contact *contactSeek(struct Contact *contact, char *findName, int option);

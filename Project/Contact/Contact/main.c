@@ -29,18 +29,19 @@ int main(int argc, const char * argv[])
         switch(option)
         {
             case 0:
+                saveContact(contact, count);
                 destroyContact(contact);
                 break;
             case add:     //add
-                contactAdd(contact, offset, option);  //静态内存申请时调用
-                offset++;   //静态内存申请时调用
-//                contactAdd(contact,count,option);   //动态内存申请的时候调用
+//                contactAdd(contact, offset, option);  //静态内存申请时调用
+//                offset++;   //静态内存申请时调用
+                contactAdd(contact,count,option);   //动态内存申请的时候调用
                 break;
             case del:     //del
 
                 contactDel(contact, option);
-//                count->contactCount--;   //动态内存申请的时候调用
-                offset--;  //静态内存申请时调用
+                count->contactCount--;   //动态内存申请的时候调用
+//                offset--;  //静态内存申请时调用
                 break;
             case amend:     //amend
                 contactAmend(contact, option);
