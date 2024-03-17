@@ -18,6 +18,7 @@ int main(int argc, const char * argv[])
     struct Count *count = (struct Count*)calloc(1,sizeof(struct Count));
     count->memoryCount = CONTACTMIN;
     contact = contactInit();
+    loadContact(contact, count);
     int offset = 0;   ////静态内存申请时调用
     
     int option = 0;

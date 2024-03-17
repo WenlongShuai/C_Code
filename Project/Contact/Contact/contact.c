@@ -2,6 +2,7 @@
 
 #include "contact.h"
 
+//打印通讯录的功能选项
 void contactMenu()
 {
     printf("------------------------------------\n");
@@ -13,6 +14,8 @@ void contactMenu()
     printf("------------------------------------\n");
 }
 
+
+//打印功能选项的提示信息
 void printMenu(int num,char *name, int *age, int *sex, char *phone, char *address)
 {
     switch(num)
@@ -39,6 +42,7 @@ void printMenu(int num,char *name, int *age, int *sex, char *phone, char *addres
     }
 }
 
+//当联系人占满malloc申请的内存空间的时候增加内存
 static void addMemory(struct Contact *contact, struct Count *count)
 {
     if(count->contactCount == count->memoryCount)
@@ -60,13 +64,12 @@ static void addMemory(struct Contact *contact, struct Count *count)
 void saveContact(struct Contact *contact, struct Count *count)
 {
     int i = 0;
-    FILE *pfWrite = fopen("contact","wb");
+    FILE *pfWrite = fopen("contact.txt","wb");
     if(pfWrite == NULL)
     {
         perror("saveContact");
         return;
     }
-    printf("12345\n");
     for(i=0;i<count->contactCount;i++)
     {
         fwrite(contact+i, sizeof(struct Contact), 1, pfWrite);
@@ -81,18 +84,19 @@ void saveContact(struct Contact *contact, struct Count *count)
 //从文本数据中读取联系人添加到内存中
 void loadContact(struct Contact *contact, struct Count *count)
 {
-    addMemory(contact, count);
-    int i = 0;
     FILE *pfRead = fopen("contact.txt", "rb");
     if(pfRead == NULL)
     {
         perror("loadContact");
         return;
     }
-    while(fread(contact+i, sizeof(struct Contact), 1, pfRead) == 1)
+//    struct Contact *tmp = NULL;
+    while(fread(contact+count->contactCount, sizeof(struct Contact), 1, pfRead) == 1)
     {
-        i++;
-    }
+        addMemory(contact, count);
+        
+        count->contactCount++;
+    };
     
     fclose(pfRead);
     pfRead = NULL;
@@ -157,7 +161,7 @@ struct Contact* contactInit()
     return contact;
 }
 
-
+//退出通讯录的时候释放在堆上开辟的内存空间
 void destroyContact(struct Contact *contact)
 {
     assert(contact);
@@ -197,16 +201,15 @@ void contactAdd(struct Contact *contact,struct Count *count,int option)
     
     printMenu(option,name,&age,&sex,phone,address);
     
-    contact += count->contactCount;
-    strcpy(contact->name, name);
-    contact->age = age;
-    contact->sex = sex;
-    strcpy(contact->phone, phone);
-    strcpy(contact->address, address);
+    strcpy((contact+count->contactCount)->name, name);
+    (contact+count->contactCount)->age = age;
+    (contact+count->contactCount)->sex = sex;
+    strcpy((contact+count->contactCount)->phone, phone);
+    strcpy((contact+count->contactCount)->address, address);
     count->contactCount++;
 }
 
-
+//删除联系人功能
 void contactDel(struct Contact *contact, int option)
 {
     char delName[20] = {0};
@@ -245,6 +248,7 @@ void contactDel(struct Contact *contact, int option)
     }
 }
 
+//修改联系人功能
 void contactAmend(struct Contact *contact, int option)
 {
     char amendName[20] = {0};
@@ -314,6 +318,8 @@ void contactAmend(struct Contact *contact, int option)
     }
 }
 
+
+//查找联系人的功能
 struct Contact *contactSeek(struct Contact *contact, char *findName, int option)
 {
     char seekName[20] = {0};
@@ -336,7 +342,7 @@ struct Contact *contactSeek(struct Contact *contact, char *findName, int option)
     return NULL;
 }
 
-
+//显示通讯录的所有联系人信息
 void contactShow(struct Contact *contact)
 {
     //显示通讯录的联系人
@@ -391,6 +397,7 @@ static void bubbleSort(void* base, int num, int size,  int (*compar)(const void*
     }
 }
 
+//把添加的联系人进行升序排序
 void contactSort(struct Contact *contact)
 {
     bubbleSort(contact, CONTACTNUM, sizeof(struct Contact), comparStruct);
