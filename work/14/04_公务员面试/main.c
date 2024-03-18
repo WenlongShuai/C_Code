@@ -10,66 +10,97 @@
 
 #include <stdio.h>
 
-float averageScore(int *score, int len)
-{
-    int i = 0;
-    int max = score[0];
-    int min = score[0];
-    int maxFlag = 0;
-    int minFlag = 0;
-    float sum = 0;
-    
-    for(i=0;i<len;i++)
-    {
-        if(score[i] > max)
-        {
-            max = score[i];
-        }
-        if(score[i] < min)
-        {
-            min = score[i];
-        }
-    }
-    
-    for(i=0;i<len;i++)
-    {
-        if(score[i] == max && maxFlag == 0)
-        {
-            maxFlag = 1;
-            continue;
-        }
-        if(score[i] == min && minFlag == 0)
-        {
-            minFlag = 1;
-            continue;
-        }
-        sum += score[i];
-    }
-    return sum / (len-2);
-    
-    
-    //方法二
-    //使用排序的方法，先将他们升序排序，然后处理的时候就去掉第一个元素和最后一个元素。最后将其他元素加起来求平均
-}
+//方法一
+//float averageScore(int *score, int len)
+//{
+//    int i = 0;
+//    int max = score[0];
+//    int min = score[0];
+//    int maxFlag = 0;
+//    int minFlag = 0;
+//    float sum = 0;
+//
+//    for(i=0;i<len;i++)
+//    {
+//        if(score[i] > max)
+//        {
+//            max = score[i];
+//        }
+//        if(score[i] < min)
+//        {
+//            min = score[i];
+//        }
+//    }
+//
+//    for(i=0;i<len;i++)
+//    {
+//        if(score[i] == max && maxFlag == 0)
+//        {
+//            maxFlag = 1;
+//            continue;
+//        }
+//        if(score[i] == min && minFlag == 0)
+//        {
+//            minFlag = 1;
+//            continue;
+//        }
+//        sum += score[i];
+//    }
+//    return sum / (len-2);
+//
+//
+//    //方法二
+//    //使用排序的方法，先将他们升序排序，然后处理的时候就去掉第一个元素和最后一个元素。最后将其他元素加起来求平均
+//}
+//
+//int main(int argc, const char * argv[])
+//{
+//    int score[7] = {0};
+//    int len = sizeof(score)/sizeof(score[0]);
+//    int i = 0;
+//
+//    while(scanf("%d",score+i) == 1)
+//    {
+//        i++;
+//        if(i == 7)
+//        {
+//            float ret = averageScore(score,len);
+//            printf("%.2f\n",ret);
+//            i = 1;
+//        }
+//
+//    }
+//    return 0;
+//}
 
-int main(int argc, const char * argv[])
+//方法二
+int main()
 {
-    int score[7] = {0};
-    int len = sizeof(score)/sizeof(score[0]);
+    int min = 100;
+    int max = 0;
+    int score = 0;
+    int sum = 0;
     int i = 0;
-    int a = 1;
-    while(a)
+    while(scanf("%d",&score) == 1)
     {
-        for(i=0;i<7;i++)
+        i++;
+        if(score > max)
+            max = score;
+        if(score < min)
+            min = score;
+        sum += score;
+        
+        if(i == 7)
         {
-            a = scanf("%d",score+i);
+            printf("%.2f\n",(sum-max-min)/5.0);
+            max = 0;
+            min = 100;
+            sum = 0;
+            i = 0;
         }
-        float ret = averageScore(score,len);
-        printf("%.2f\n",ret);
+        
     }
-    
     
     return 0;
 }
-
 

@@ -24,29 +24,71 @@
 
 #include <stdio.h>
 
+//方法一
+//void arrowsPattern(int n)
+//{
+//    int i = 0;
+//    int j = 0;
+//    for(i=0;i<=n;i++)
+//    {
+//        for(j=0;j<=2*n-i;j++)
+//        {
+//            if(i+j >= 2*n-i)
+//                printf("*");
+//            else
+//                printf(" ");
+//        }
+//        printf("\n");
+//    }
+//    for(i=n-1;i>=0;i--)
+//    {
+//        for(j=0;j<=2*n-i;j++)
+//        {
+//            if(i+j >= 2*n-i)
+//                printf("*");
+//            else
+//                printf(" ");
+//        }
+//        printf("\n");
+//    }
+//}
+
+
+//方法二
 void arrowsPattern(int n)
 {
     int i = 0;
-    int j = 0;
-    for(i=0;i<=n;i++)
+    
+    //上半部分的n行
+    for(i=0;i<n;i++)
     {
-        for(j=0;j<=2*n-i;j++)
+        int j = 0;
+        //打印‘ ’
+        for(j=0;j<2*(n-i);j++)
         {
-            if(i+j >= 2*n-i && i+j <= 2*n)
-                printf("*");
-            else
-                printf(" ");
+            printf(" ");
+        }
+        //打印‘*’
+        for(j=0;j<i+1;j++)
+        {
+            printf("*");
         }
         printf("\n");
     }
-    for(i=n-1;i>=0;i--)
+    
+    //下半部分的n+1行
+    for(i=0;i<n+1;i++)
     {
-        for(j=0;j<=2*n-i;j++)
+        int j = 0;
+        //打印‘ ’
+        for(j=0;j<2*i;j++)
         {
-            if(i+j >= 2*n-i && i+j <= 2*n)
-                printf("*");
-            else
-                printf(" ");
+            printf(" ");
+        }
+        //打印‘*’
+        for(j=0;j<n+1-i;j++)
+        {
+            printf("*");
         }
         printf("\n");
     }
