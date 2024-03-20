@@ -6,32 +6,48 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <string.h>
+#include <ctype.h>
 
 int myAtoi(const char *nptr)
 {
+    assert(nptr);
     int ret = 0;
-    char symbol = 0;
+    int flag = 1;
     
-    if(nptr == NULL)
+    if(!strcmp(nptr, ""))
     {
         return 0;
     }
     
     while(*nptr != '\0')
     {
-        if(*nptr == ' ')
+        //这种情况只能判断空格字符，不能判断其他空白字符
+//        if(*nptr == ' ')
+//        {
+//            nptr++;
+//            continue;
+//        }
+        
+        //判断其他空白字符
+        if(isspace(*nptr))
         {
             nptr++;
             continue;
         }
         
-        if(*nptr == '+' || *nptr == '-')
+        if(*nptr == '-')
         {
-            symbol = *nptr;
+            flag = -1;
+        }
+        else if(*nptr == '+')
+        {
+            flag = 1;
         }
         else if(*nptr >= '0' && *nptr <= '9')
         {
-            ret = ret * pow(10, 1)+(*nptr-'0');
+            ret = ret * 10 + flag*(*nptr-'0');
         }
         else
             break;
@@ -42,10 +58,7 @@ int myAtoi(const char *nptr)
         }
         nptr++;
     }
-    if('-' == symbol)
-        return -ret;
     return ret;
-    
 }
 
 int main(int argc, const char * argv[])
