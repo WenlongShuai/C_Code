@@ -4,16 +4,47 @@
 
 struct Node* insertLikedList(struct Node *pHead, int num)
 {
-    if(NULL == pHead)
+    //写法一
+//    if(NULL == pHead)
+//    {
+//        pHead = (struct Node *)malloc(sizeof(struct Node));
+//        if(pHead == NULL)
+//        {
+//            perror("insertLikedList malloc 1 error\n");
+//            return NULL;
+//        }
+//        pHead->data = num;
+//        pHead->next = NULL;
+//        return pHead;
+//    }
+//    struct Node* newNode = (struct Node *)malloc(sizeof(struct Node));
+//    if(newNode == NULL)
+//    {
+//        perror("insertLikedList malloc 2 error\n");
+//        return NULL;
+//    }
+//    newNode->next = pHead->next;
+//    pHead->next = newNode;
+//    newNode->data = num;
+//    return newNode;
+    
+    //写法二
+    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+    if(newNode == NULL)
     {
-        pHead = (struct Node *)malloc(sizeof(struct Node));
-        pHead->data = num;
-        pHead->next = NULL;
-        return pHead;
+        perror("insertLikedList malloc error\n");
+        return NULL;
     }
-    struct Node* newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->next = pHead->next;
-    pHead->next = newNode;
+    
+    if(pHead == NULL)
+    {
+        newNode->next = NULL;
+    }
+    else
+    {
+        newNode->next = pHead->next;
+        pHead->next = newNode;
+    }
     newNode->data = num;
     return newNode;
 }
@@ -41,6 +72,11 @@ struct Node* reversedLinkedList(struct Node* pHead)
 
 void printLinkedList(struct Node *pHead)
 {
+    if(pHead == NULL)
+    {
+        printf("{}\n");
+        return;
+    }
     while(pHead != NULL)
     {
         printf("%d ",pHead->data);

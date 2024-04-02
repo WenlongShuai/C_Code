@@ -17,14 +17,15 @@ int main(int argc, const char * argv[])
         {
             break;
         }
-        scanf("%d",&num);
-        
-        //将当前节点的地址传进去，在这个地址的基础上开辟一个新的节点，返回新节点的地址，然后又传进去，依次循环，直到把所有的数据插入到链表
-        newNode = insertLikedList(newNode, num);
-        if(flag)
+        if(scanf("%d",&num) != 0)
         {
-            pHead = newNode; //这里是为了保存链表的头节点，不然后面就这个链表
-            flag = 0;
+            //将当前节点的地址传进去，在这个地址的基础上开辟一个新的节点，返回新节点的地址，然后又传进去，依次循环，直到把所有的数据插入到链表
+            newNode = insertLikedList(newNode, num);
+            if(flag)
+            {
+                pHead = newNode; //这里是为了保存链表的头节点，不然后面就这个链表
+                flag = 0;
+            }
         }
     }
     printLinkedList(pHead);
